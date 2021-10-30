@@ -24,22 +24,37 @@ function playRound(playerSelection, computerSelection){
   }
 }
 
+//check to make sure no mistaken inputs.
+function checkProperInput(playerSelection){
+  if (playerSelection.toLowerCase() == "rock" ||
+    playerSelection.toLowerCase() == "paper"||
+    playerSelection.toLowerCase() == "scissors"){
+      return true; 
+    }
+  else {
+    return false;
+  }
+}
+
 function game(){ 
   //setting scores to zero;
-  var rounds = 0;
-  var wins = 0;
-  var losses = 0;
+  let rounds = 0;
+  let wins = 0;
+  let losses = 0;
   
   //playing best outta 5 
   while (rounds != 5){
     //choosing rock paper or scissors
-    var playerSelection = window.prompt("Choose rock, paper, or scissors");
-    var computerSelection = computerPlay();
-    
+    let computerSelection = computerPlay();
+    let playerSelection = window.prompt("Choose rock, paper, or scissors.");
+    if (checkProperInput(playerSelection) == false){
+      playerSelection = window.prompt("Improper selection, please try again. Choose rock, paper, or scissors.")
+    }
+  
     //messages to tell results
-    var winRoundMess = `You win! ${playerSelection} beats ${computerSelection}`
-    var loseRoundMess = `You lose! ${computerSelection} beats ${playerSelection}`
-    var tieRoundMess = `It's a tie! The computer also chose ${computerSelection}`
+    let winRoundMess = `You win! ${playerSelection} beats ${computerSelection}`
+    let loseRoundMess = `You lose! ${computerSelection} beats ${playerSelection}`
+    let tieRoundMess = `It's a tie! The computer also chose ${computerSelection}`
     
     //play round
     switch (playRound(playerSelection, computerSelection)){
@@ -60,7 +75,7 @@ function game(){
   }
   
   //notifying final results
-  var scoreMess = `You won ${wins} times and the computer won ${losses} times.`
+  let scoreMess = `You won ${wins} times and the computer won ${losses} times.`
   if(wins === losses){
     console.log(`${scoreMess} It's a tie!`);
   } else if(wins > losses){
