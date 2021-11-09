@@ -1,3 +1,30 @@
+//initializing playerScore element to display
+const playerScoreDiv = document.querySelector('#player-score');
+const playerScore = document.createElement('p');
+playerScore.textContent = 0;
+playerScore.style.marginTop = "10px";
+playerScore.style.fontSize = "36px";
+playerScoreDiv.appendChild(playerScore);
+let playerWins = 0;
+
+//initializing computerScore element to display
+const computerScoreDiv = document.querySelector('#computer-score');
+const computerScore = document.createElement('p');
+computerScore.textContent = 0;
+computerScore.style.marginTop= "10px";
+computerScore.style.fontSize = "36px";
+computerScoreDiv.appendChild(computerScore);
+let compWins = 0;
+
+const infoBoard = document.querySelector('#info-board');
+const resetButtonContainer = document.querySelector('#reset-button-container');
+const resetButton = document.createElement('button');
+const choiceButtons = document.querySelectorAll('.choice');
+
+choiceButtons.forEach((button) => {
+  button.addEventListener('click', playRound);
+});
+
 function computerPlay(){
   switch(Math.floor(Math.random() * 3)){
     case 0: 
@@ -10,77 +37,98 @@ function computerPlay(){
 }
 
 //return 0 for lose, 1 for win, 2 for tie
-function playRound(playerSelection, computerSelection){
+function playRound(e){
+  let playerSelection = e.target.id.toString();
+  let computerSelection = computerPlay();
   if(playerSelection === computerSelection){
-    return 2;
+    result = 2;
   } 
-  switch(playerSelection.toLowerCase()){
+  else {
+    switch(playerSelection){
     case "rock": 
-      return computerSelection === "scissors" ? 1 : 0;
+      result = computerSelection === "scissors" ? 1 : 0;
+      break;
     case "paper":
-      return computerSelection ==="rock" ? 1 : 0;
+      result = computerSelection ==="rock" ? 1 : 0;
+      break;
     case "scissors":
-      return computerSelection ==="paper" ? 1 : 0;
+      result = computerSelection ==="paper" ? 1 : 0; 
+      break;
+    }
+  }
+  logResults(result, playerSelection, computerSelection);
+  updateScore();
+  if(checkWin5()){
+    endGame();
   }
 }
 
-//check to make sure no mistaken inputs.
-function checkProperInput(playerSelection){
-  if (playerSelection.toLowerCase() == "rock" ||
-    playerSelection.toLowerCase() == "paper"||
-    playerSelection.toLowerCase() == "scissors"){
-      return true; 
-    }
-  else {
+//output result of the round into gamelog
+function logResults(result, playerSelection, computerSelection){
+  let log = document.createElement('p')
+  log.style.margin ="0px";
+  switch(result){
+    case 0: 
+      log.textContent = `You lose the round! ${computerSelection} beats ${playerSelection}.`;
+      compWins++;
+      break;
+    case 1:
+      log.textContent = `You win the round! ${playerSelection} beats ${computerSelection}.`;
+      playerWins++;
+      break;
+    case 2:
+      log.textContent = `It's a tie! The computer also chose ${computerSelection}.`;
+      break;
+  }
+  infoBoard.appendChild(log);
+}
+
+function updateScore(){
+  playerScore.textContent = playerWins;
+  computerScore.textContent = compWins;
+}
+
+function checkWin5(){
+  let log = document.createElement('p');
+  log.style.margin ="0px";
+  if(playerWins === 5){
+    log.textContent = "Congratulations you beat the computer 5 times!";
+    infoBoard.appendChild(log);
+    return true;
+  }else if (compWins === 5){
+    log.textContent = "Sorry, the computer beat you 5 times! Please try again!";
+    infoBoard.appendChild(log);
+    return true;
+  }
+  else{
     return false;
   }
 }
 
-function game(){ 
-  //setting scores to zero;
-  let rounds = 0;
-  let wins = 0;
-  let losses = 0;
-  
-  //playing best outta 5 
-  while (rounds != 5){
-    //choosing rock paper or scissors
-    let computerSelection = computerPlay();
-    let playerSelection = window.prompt("Choose rock, paper, or scissors.");
-    if (checkProperInput(playerSelection) == false){
-      playerSelection = window.prompt("Improper selection, please try again. Choose rock, paper, or scissors.")
-    }
-  
-    //messages to tell results
-    let winRoundMess = `You win! ${playerSelection} beats ${computerSelection}`
-    let loseRoundMess = `You lose! ${computerSelection} beats ${playerSelection}`
-    let tieRoundMess = `It's a tie! The computer also chose ${computerSelection}`
-    
-    //play round
-    switch (playRound(playerSelection, computerSelection)){
-      case 0: 
-        console.log(loseRoundMess);
-        losses++; 
-        break;
-      case 1:
-        console.log(winRoundMess);
-        wins++;
-        break;
-      case 2:
-        console.log(tieRoundMess);
-        break;
-    } 
-    console.log(`The current score is ${wins} to ${losses}`)
-    rounds++; 
+function reset(){
+  playerWins = 0;
+  compWins = 0;
+  updateScore();
+  clearInfoBoard(infoBoard);
+  choiceButtons.forEach((button) => {
+    button.addEventListener('click', playRound);
+  });
+  resetButtonContainer.removeChild(resetButton);
+}
+
+function clearInfoBoard(parent){
+  while(parent.childElementCount !== 1){
+    parent.removeChild(parent.lastChild);
   }
-  
-  //notifying final results
-  let scoreMess = `You won ${wins} times and the computer won ${losses} times.`
-  if(wins === losses){
-    console.log(`${scoreMess} It's a tie!`);
-  } else if(wins > losses){
-    console.log(`${scoreMess} You win the best of 5!`);
-  } else {
-    console.log(`${scoreMess} You lost the best of 5...`); 
-  }
+}
+
+function endGame(){
+  choiceButtons.forEach((button) => {
+    button.removeEventListener('click', playRound);
+  });
+  resetButton.textContent = 'Press to reset';
+  resetButton.style.padding = '16px';
+  resetButton.style.marginBottom = '16px';
+  resetButtonContainer.appendChild(resetButton);
+  resetButton.addEventListener("click", reset);
 }
