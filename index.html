@@ -4,25 +4,26 @@
   <title>Rock Paper Scissors!</title>
   <meta charset="UTF-8"/>
   <link rel="stylesheet" href="styles.css">
-  <script src="script.js"></script>
+  <script src="script.js" defer></script>
 </head>
 <body>
   <h1>Let's Play Rock, Paper, Scissor!</h1>
   <div id="content">
     <div id="button-container">
-      <button id = rock type="button">Rock</button>
-      <button id = paper type="button">Paper</button>
-      <button id = scissor type="button">Scissor</button>
+      <button class = "choice" id = rock>Rock</button>
+      <button class = "choice" id = paper>Paper</button>
+      <button class = "choice" id = scissors>Scissors</button>
     </div>
-    
-    <button id = play-button>Press to Play!</button>
+    <div id="reset-button-container"></div>
     <h3>Scoreboard</h3>
     <div id="scoreboard"> 
       <div id="player-score">Player</div>
       <div id="vs-sign">VERSUS</div>
       <div id="computer-score">Computer</div>
     </div>
-    <div id="info-board">Play Log</div>
+    <div id="info-board">
+      <h4>Play log:</h4>
+    </div>
   </div>
 </body>
 </html>
