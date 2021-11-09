@@ -9,30 +9,28 @@ h1 {
   align-items: center;
 }
 
-#rock, #paper, #scissor{
+#rock, #paper, #scissors{
   height: 150px;
   width: 150px;
+  font-size: 24px;
+  font-weight: bold;
 }
 
 #rock{
   background-color: #73a263;
 }
+
 #paper{
   background-color: #e14318;
   margin-left: 46px;
   margin-right: 46px;
 }
-#scissor{ 
+#scissors{ 
   background-color:#A2D7D5;
 }
 
 #button-container{
   display: flex;
-  margin-bottom: 16px;
-}
-
-#play-button{
-  padding: 16px;
   margin-bottom: 16px;
 }
 
@@ -74,8 +72,13 @@ h3{
   border-color: black;
   width: 700px;
   height: 250px;
-  padding: 10px;
-  text-align: center;
-  font-size: 20px;
-  font-weight: bold;
+  font-size: 14px;
+  padding-left: 16px;
+  overflow-y: auto;
+}
+
+h4{
+  font-size:16px;
+  margin-top: 10px;
+  margin-bottom: 4px;
 }
